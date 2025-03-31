@@ -1,10 +1,10 @@
-create table product (
-	id SERIAL primary key,
-	product_name varchar(50) not null,
-	price numeric(10, 2) not null
+CREATE TABLE product (
+	ID SERIAL PRIMARY KEY,
+	product_name varchar(50) NOT NULL,
+	price numeric(10, 2) NOT NULL
 );
 
-select * from product p
+SELECT * FROM product p
 
-insert into product(product_name, price) values('Sushi', 100);
+INSERT INTO product(product_name, price) VALUES('Sushi', 100);
 
