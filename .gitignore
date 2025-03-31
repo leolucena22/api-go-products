@@ -30,11 +30,6 @@ Thumbs.db
 ### Docker ###
 /.dockerignore
 
-### Banco de Dados ###
-*.sqlite
-*.db
-*.sql
-
 ### Arquivos sensíveis ###
 .env
 .env.local
