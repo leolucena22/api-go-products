@@ -6,10 +6,6 @@ Thumbs.db
 /bin/
 /pkg/
 
-### Dependências do Go ###
-/go.sum
-/go.mod
-
 ### Logs ###
 *.log
 *.out
