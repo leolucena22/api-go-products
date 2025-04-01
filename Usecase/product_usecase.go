@@ -42,3 +42,7 @@ func (pu *ProductsUsecase) GetProductById(id_product int) (*model.Product, error
 
 	return product, nil
 }
+
+func (pu *ProductsUsecase) UpdatePriceProduct(id_product int, newPrice float64) (*model.Product, error) {
+	return pu.repository.UpdatePriceProduct(id_product, newPrice)
+}

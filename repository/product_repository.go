@@ -97,3 +97,33 @@ func (pr *ProductsRepository) GetProductById(id_product int) (*model.Product, er
 	query.Close()
 	return &produto, nil
 }
+
+func (pr *ProductsRepository) UpdatePriceProduct(id_product int, newPrice float64) (*model.Product, error) {
+	query, err := pr.connection.Prepare(`
+			UPDATE product 
+			SET price = $1 
+			WHERE id = $2 
+			RETURNING id, product_name, price
+	`)
+
+	if err != nil {
+		return nil, fmt.Errorf("erro ao preparar query: %w", err)
+	}
+	defer query.Close()
+
+	var product model.Product
+	err = query.QueryRow(newPrice, id_product).Scan(
+		&product.ID,
+		&product.Name,
+		&product.Price,
+	)
+
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, nil
+		}
+		return nil, fmt.Errorf("erro ao atualizar produto: %w", err)
+	}
+
+	return &product, nil
+}

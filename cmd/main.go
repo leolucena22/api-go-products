@@ -38,5 +38,7 @@ func main() {
 
 	server.GET("/product/:productId", ProductController.GetProductById)
 
+	server.PUT("/product/:productId", ProductController.UpdatePriceProduct)
+
 	server.Run(":8000")
 }

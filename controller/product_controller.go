@@ -83,3 +83,42 @@ func (p *ProductController) GetProductById(ctx *gin.Context) {
 	}
 	ctx.JSON(http.StatusOK, product)
 }
+
+func (p *ProductController) UpdatePriceProduct(ctx *gin.Context) {
+	// Capturar ID
+	id := ctx.Param("productId")
+	if id == "" {
+		ctx.JSON(http.StatusBadRequest, model.Response{Message: "ID é obrigatório"})
+		return
+	}
+
+	// Converter ID
+	productId, err := strconv.Atoi(id)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, model.Response{Message: "ID inválido"})
+		return
+	}
+
+	// Capturar novo preço
+	var request struct {
+		Price float64 `json:"price"`
+	}
+	if err := ctx.BindJSON(&request); err != nil {
+		ctx.JSON(http.StatusBadRequest, model.Response{Message: "Dados inválidos"})
+		return
+	}
+
+	// Atualizar
+	product, err := p.productsUsecase.UpdatePriceProduct(productId, request.Price)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, model.Response{Message: "Erro interno"})
+		return
+	}
+
+	if product == nil {
+		ctx.JSON(http.StatusNotFound, model.Response{Message: "Produto não encontrado"})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, product)
+}
