@@ -127,3 +127,30 @@ func (pr *ProductsRepository) UpdatePriceProduct(id_product int, newPrice float6
 
 	return &product, nil
 }
+
+func (pr *ProductsRepository) DeleteProduct(id_product int) (*model.Product, error) {
+	query, err := pr.connection.Prepare(`
+		DELETE FROM product WHERE id = $1 RETURNING id, product_name, price
+	`)
+
+	if err != nil {
+		return nil, fmt.Errorf("erro ao preparar query: %w", err)
+	}
+	defer query.Close()
+
+	var product model.Product
+	err = query.QueryRow(id_product).Scan(
+		&product.ID,
+		&product.Name,
+		&product.Price,
+	)
+
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, nil
+		}
+		return nil, fmt.Errorf("erro ao deletar product: %w", err)
+	}
+
+	return &product, nil
+}

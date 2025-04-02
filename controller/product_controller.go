@@ -122,3 +122,36 @@ func (p *ProductController) UpdatePriceProduct(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, product)
 }
+
+func (p *ProductController) DeleteProduct(ctx *gin.Context) {
+	//Captura ID
+	id := ctx.Param("productId")
+	if id == "" {
+		ctx.JSON(http.StatusBadRequest, model.Response{
+			Message: "ID é obrigatório"})
+		return
+	}
+
+	//Converte ID
+	productId, err := strconv.Atoi(id)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, model.Response{
+			Message: "ID inválido"})
+		return
+	}
+
+	//Deletar
+	product, err := p.productsUsecase.DeleteProduct(productId)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, model.Response{Message: "Erro interno"})
+		return
+	}
+
+	if product == nil {
+		ctx.JSON(http.StatusNotFound, model.Response{
+			Message: "Produto não encontrado"})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, product)
+}
