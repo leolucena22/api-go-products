@@ -6,6 +6,7 @@ import (
 	"api/db"
 	"api/repository"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -31,6 +32,8 @@ func main() {
 			})
 		})
 	*/
+
+	server.Use(cors.Default())
 
 	server.GET("/products", ProductController.GetProducts)
 
